@@ -1,0 +1,40 @@
+server:
+  port: 9000
+
+#spring:
+#  datasource:
+#    url: jdbc:mysql://sql7.freemysqlhosting.net:3306/sql7755786?serverTimezone=UTC
+#    username: sql7755786
+#    password: FvxfaBAIfV
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#  jpa:
+#    database-platform: org.hibernate.dialect.MySQL8Dialect
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#  main:
+#    allow-circular-references: true
+
+# Optional commented out H2 configuration
+spring:
+  main:
+    allow-circular-references: true
+  datasource:
+    url: jdbc:h2:mem:mydb
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+jwt:
+  secret: your_jwt_secret_key
+  expiration:  36000000 # Example: 10 hours in milliseconds
+#  expiration: 20000 # Example: 20 seconds
+
+
+
