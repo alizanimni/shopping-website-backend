@@ -30,8 +30,8 @@ public class SecurityConfigure implements WebMvcConfigurer {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless sessions
                 .cors(Customizer.withDefaults()) // Enable CORS for Spring Security
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/authenticate", "/users/register", "/h2-console/**").permitAll() // Public endpoints
-                        .requestMatchers("/users/**", "/notes/**", "/admin/**").authenticated() // All authenticated users can access these routes
+                        .requestMatchers("/authenticate", "/users/register", "/h2-console/**","/item/**").permitAll() // Public endpoints
+                        .requestMatchers("/users/**").authenticated() // All authenticated users can access these routes
                         .anyRequest().authenticated() // Require authentication for all other requests
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session management

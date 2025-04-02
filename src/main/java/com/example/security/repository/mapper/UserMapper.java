@@ -9,6 +9,7 @@ public class UserMapper implements RowMapper<CustomUser> {
     @Override
     public CustomUser mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new CustomUser(
+                rs.getInt("id"),
                 rs.getString("first_name"),
                 rs.getString("last_name"),
                 rs.getString("email"),
