@@ -57,13 +57,13 @@ CREATE TABLE favorite_items(
 
 CREATE TABLE orders(
     id INT AUTO_INCREMENT,
-    user_id INT NOT NULL,
+    username VARCHAR NOT NULL,
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     shipping_address VARCHAR(255) NOT NULL,
-    total_price DECIMAL(10,2) NOT NULL,
+    total_price DECIMAL(10,2) DEFAULT 0.00,
     status VARCHAR(10) DEFAULT 'OPEN',
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (username) REFERENCES users(username)
 );
 
 CREATE TABLE ordered_items (
