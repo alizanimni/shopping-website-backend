@@ -6,6 +6,9 @@ import com.example.security.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,4 +47,33 @@ public class ItemController {
                     .body("An error occurred while retrieving the item.");
         }
     }
+
+    @PostMapping("/add-to-favorite/{id}")
+    public ResponseEntity<String> addItemToFavoriteList(@PathVariable int id){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User user = (User) authentication.getPrincipal();
+            String username = user.getUsername();
+
+            return itemService.addItemToFavoriteList(username, id);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/favorites")
+    public ResponseEntity<?> getAllFavoriteItems(){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User user = (User) authentication.getPrincipal();
+            String username = user.getUsername();
+            List<Integer> itemsList = itemService.getAllFavoriteItems(username);
+            return ResponseEntity.ok(itemsList);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

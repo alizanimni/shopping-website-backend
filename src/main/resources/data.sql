@@ -48,10 +48,10 @@ INSERT INTO items(name, photo, price, item_quantity) VALUES
 ('Smart Home Hub', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJbTh8X-jHaPraptQ1ApJSSvygpflEJwZb0Q&s', 799.99, 15);
 
 CREATE TABLE favorite_items(
-    user_id INT NOT NULL,
+    username VARCHAR NOT NULL,
     item_id INT NOT NULL,
-    PRIMARY KEY(user_id,item_id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
+    PRIMARY KEY(username,item_id),
+    FOREIGN KEY (username) REFERENCES users(username),
     FOREIGN KEY (item_id) REFERENCES items(id)
 );
 
