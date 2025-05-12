@@ -1,6 +1,7 @@
 package com.example.security.service;
 
 import com.example.security.model.CustomUser;
+import com.example.security.model.UserUpdateDetails;
 import com.example.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,9 +25,13 @@ public class UserService {
         }
         CustomUser userWithTheSameEmail = getUserByEmail(user.getEmail());
         CustomUser userWithTheSameUsername = getUserByUsername(user.getUsername());
-        if(
-                userWithTheSameEmail != null || userWithTheSameUsername != null){
-            return "User not created, This email or username already exists in the system.";
+
+        if (userWithTheSameEmail != null) {
+            return "Email already exists";
+        }
+
+        if (userWithTheSameUsername != null) {
+            return "Username already exists";
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -47,8 +52,8 @@ public class UserService {
         return userRepository.findAllUsers();
     }
 
-    public CustomUser updateUser(CustomUser updatedUser) {
-        return userRepository.updateUser(updatedUser);
+    public CustomUser updateUser(UserUpdateDetails updatedUser, String username) {
+        return userRepository.updateUser(updatedUser,username);
     }
 
     public String deleteUser(String username) {

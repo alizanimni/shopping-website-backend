@@ -76,4 +76,21 @@ public class ItemController {
         }
     }
 
+    @DeleteMapping("/favorites/{itemId}")
+    public ResponseEntity<String> removeFavorite(@PathVariable int itemId) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String username = ((User) auth.getPrincipal()).getUsername();
+
+            itemService.removeItemFromFavorites(username, itemId); // מחזירה void
+
+            return ResponseEntity.ok("Item removed from favorites");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");
+        }
+    }
+
+
 }

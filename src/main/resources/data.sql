@@ -51,7 +51,7 @@ CREATE TABLE favorite_items(
     username VARCHAR NOT NULL,
     item_id INT NOT NULL,
     PRIMARY KEY(username,item_id),
-    FOREIGN KEY (username) REFERENCES users(username),
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
     FOREIGN KEY (item_id) REFERENCES items(id)
 );
 
@@ -63,7 +63,7 @@ CREATE TABLE orders(
     total_price DECIMAL(10,2) DEFAULT 0.00,
     status VARCHAR(10) DEFAULT 'OPEN',
     PRIMARY KEY (id),
-    FOREIGN KEY (username) REFERENCES users(username)
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE ordered_items (
@@ -72,7 +72,7 @@ CREATE TABLE ordered_items (
     quantity INT NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     PRIMARY KEY (order_id, item_id),
-    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (item_id) REFERENCES items(id)
 );
 

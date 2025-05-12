@@ -1,6 +1,7 @@
 package com.example.security.repository;
 
 import com.example.security.model.CustomUser;
+import com.example.security.model.UserUpdateDetails;
 import com.example.security.repository.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -50,14 +51,13 @@ public class UserRepository {
         return users;
     }
 
-    public CustomUser updateUser(CustomUser user) {
+    public CustomUser updateUser(UserUpdateDetails user,String username) {
         String sql = String.format("UPDATE %s SET first_name = ?, last_name = ?, email = ?, phone = ?, address = ? WHERE username = ?", USERS_TABLE);
-        jdbcTemplate.update(sql, user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getAddress(), user.getUsername());
-        return findUserByUsername(user.getUsername());
+        jdbcTemplate.update(sql, user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getAddress(), username);
+        return findUserByUsername(username);
     }
 
     public String deleteUser(String username) {
-        //String result = noteRepository.deleteUserNotes(username);
         String sql = String.format("DELETE FROM %s WHERE username = ?", USERS_TABLE);
         jdbcTemplate.update(sql, username);
         return "User deleted successfully, and ";

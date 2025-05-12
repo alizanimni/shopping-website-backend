@@ -1,6 +1,7 @@
 package com.example.security.controller;
 
 import com.example.security.model.CustomUser;
+import com.example.security.model.UserUpdateDetails;
 import com.example.security.service.UserService;
 import com.example.security.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,22 +49,19 @@ public class UserController {
 
 
     @PutMapping
-    public ResponseEntity<CustomUser> updateUser(@RequestHeader(value = "Authorization") String token, @RequestBody CustomUser updatedUser) {
+    public ResponseEntity<CustomUser> updateUser(@RequestHeader(value = "Authorization") String token, @RequestBody UserUpdateDetails updatedUser) {
         try {
             String jwtToken = token.substring(7);
             String username = jwtUtil.extractUsername(jwtToken);
-            updatedUser.setUsername(username);
-            if (updatedUser.getFirstName() == null || updatedUser.getLastName() == null || updatedUser.getEmail() == null) {
-                return new ResponseEntity("User not updated, first name, last name and email are required", HttpStatus.BAD_REQUEST);
-            }
-            CustomUser userFromDB = userService.getUserByUsername(updatedUser.getUsername());
+
+            CustomUser userFromDB = userService.getUserByUsername(username);
             if(!userFromDB.getEmail().equals(updatedUser.getEmail())){
                 CustomUser userWithTheSameEmail = userService.getUserByEmail(updatedUser.getEmail());
                 if(userWithTheSameEmail != null){
                     return new ResponseEntity("User not updated, This email already exist in the system.", HttpStatus.BAD_REQUEST);
                 }
             }
-            CustomUser user = userService.updateUser(updatedUser);
+            CustomUser user = userService.updateUser(updatedUser,username);
             if (user == null) {
                 return new ResponseEntity("User not updated. this user does not exist in the system.", HttpStatus.BAD_REQUEST);
             }
@@ -88,6 +86,7 @@ public class UserController {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
 
 

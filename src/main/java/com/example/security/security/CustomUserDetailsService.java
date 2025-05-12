@@ -26,11 +26,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
-
-        // Log the retrieved user
         System.out.println("Retrieved user: " + user.getUsername());
 
-        // Return user details WITHOUT authorities (removing roles)
         return new User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 }

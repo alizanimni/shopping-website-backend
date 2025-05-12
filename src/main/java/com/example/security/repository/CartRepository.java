@@ -27,7 +27,7 @@ public class CartRepository {
 
     public Order getCart(String username) {
         try {
-            Integer orderId = searchCartByUserId(username);
+            Integer orderId = getCartIdByUser(username);
             if (orderId == null) {
                 System.out.println("No open order");
                 return null;
@@ -51,7 +51,7 @@ public class CartRepository {
         return orders.isEmpty() ? null : orders.get(0);
     }
 
-    public Integer searchCartByUserId(String username) {
+    public Integer getCartIdByUser(String username) {
         try {
             String sql = "SELECT id FROM " + ORDER_TABLE + " WHERE username = ? AND status = 'OPEN'";
             return jdbcTemplate.queryForObject(sql, Integer.class, username);
@@ -90,22 +90,39 @@ public class CartRepository {
     }
 
     public void updateItemInCart(int itemId, int orderId, int quantity, double price) {
+        System.out.println(price);
         String sql = "UPDATE " + ORDERED_ITEMS_TABLE + " SET quantity = quantity + ?, price = price + ? WHERE item_id = ? AND order_id = ?";
         jdbcTemplate.update(sql, quantity, price, itemId, orderId);
     }
 
-    public void decreaseItemInCart(int itemId, int orderId, int quantity, double price) {
-        String sql = "UPDATE " + ORDERED_ITEMS_TABLE +
-                " SET quantity = quantity - ?, price = price - ? " +
-                "WHERE item_id = ? AND order_id = ?";
-        jdbcTemplate.update(sql, quantity, price, itemId, orderId);
+    public int getQuantityForItem(int orderId, int itemId) {
+
+        String sql = "SELECT quantity FROM ordered_items WHERE order_id = ? AND item_id = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, orderId, itemId);
     }
 
+    public void deleteItemFromCart(int orderId,double price, int itemId) {
+        System.out.println(price);
+        String sql = "DELETE FROM ordered_items WHERE order_id = ? AND item_id = ?";
+        jdbcTemplate.update(sql, orderId, itemId);
+    }
+
+    public void decreaseItemQuantityAndPrice(int orderId, int itemId, int quantity, double price) {
+        System.out.println(price);
+        String sql = "UPDATE ordered_items SET quantity = quantity - ?, price = price - ? WHERE order_id = ? AND item_id = ?";
+        jdbcTemplate.update(sql, quantity, price, orderId, itemId);
+    }
+
+    public void updateOrderTotalPrice(int orderId, double priceChange) {
+        String sql = "UPDATE orders SET total_price = total_price + ? WHERE id = ?";
+        System.out.println(priceChange);
+        jdbcTemplate.update(sql, priceChange, orderId);
+    }
 
 
     public List<Order> getAllUserOrders(String username) {
         try {
-            String sql = "SELECT id FROM " + ORDER_TABLE + " WHERE username = ?";
+            String sql = "SELECT id FROM " + ORDER_TABLE + " WHERE username = ? AND status = 'CLOSE'";
             List<Integer> orderIds = jdbcTemplate.queryForList(sql, Integer.class, username);
 
             List<Order> orders = new ArrayList<>();

@@ -1,6 +1,7 @@
 package com.example.security.service;
 
 import com.example.security.model.Item;
+import com.example.security.model.OrderedItem;
 import com.example.security.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,5 +36,18 @@ public class ItemService {
 
     public List<Integer> getAllFavoriteItems(String username){
         return itemRepository.getAllFavoriteItems(username);
+    }
+
+    public void removeItemFromFavorites(String username, int itemId){
+         itemRepository.removeItemFromFavorites(username,itemId);
+    }
+
+    public String updateItemsAfterCartCheckout(List<OrderedItem> items) {
+        System.out.println("items"+items);
+        for (OrderedItem item : items) {
+            itemRepository.updateQuantity(item.getItemId(), item.getQuantity());
+        }
+        return "update item";
+
     }
 }

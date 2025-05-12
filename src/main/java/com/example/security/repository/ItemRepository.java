@@ -43,7 +43,17 @@ public class ItemRepository {
         return jdbcTemplate.queryForList(sql,Integer.class,usernsme);
     }
 
+    public void removeItemFromFavorites(String username,int itemId){
+        String sql = "DELETE FROM " +FAVORITE_ITEMS_TABLE +" WHERE username = ? AND item_id = ?";
+        jdbcTemplate.update(sql,username,itemId);
+    }
 
+
+    public boolean updateQuantity(int itemId, int numberToDelete){
+        String sql ="UPDATE "+ ITEM_TABLE + " SET item_quantity = item_quantity - ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, numberToDelete, itemId);
+        return rowsAffected > 0;
+    }
 
 
 }

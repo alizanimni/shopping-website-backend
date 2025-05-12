@@ -38,20 +38,6 @@ try{
 }
 
 
-    //כשיש סינון של טוקן להגיע לתיקייה
-//    @PostMapping
-//    public ResponseEntity<String> createNewCart() {
-//        try {
-//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//            User user = (User) authentication.getPrincipal();
-//            String username = user.getUsername();
-//            String result = cartService.createNewCart(username,"jhf");
-//            return ResponseEntity.ok(result);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
     @PostMapping("/add-item")
     public ResponseEntity<String> addItemToCart(@RequestBody AddItemRequest request) {
         try {
@@ -99,7 +85,7 @@ try{
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Order>> getAllUserOrders(){
+    public ResponseEntity<List<Order>> getUserAllOrders(){
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = ((User) authentication.getPrincipal()).getUsername();
